@@ -5,17 +5,12 @@
       <div class="">
         <h1>Vivi Gets Ready</h1>
       </div>
-
-      <div class="">
-        <p>published: 16.10.2019, 11:44</p>
-        <h2><a href="">My first post</a></h2>
-        <p>khong biet viet gi</p>
-      </div>
-
-      <div class="">
-        <p>published: 16.10.2019, 11:44</p>
-        <h2><a href="">My second post</a></h2>
-        <p>cang khong biet viet gi</p>
-      </div>
+      {% for post in posts %}
+        <div class="">
+          <p>published: {{ post.published_date }}</p>
+          <h2><a href="">{{ post.title }}</a></h2>
+          <p>{{ post.text|linebreaksbr}}</p>
+        </div>
+      {% endfor %}
     </body>
 </html>
