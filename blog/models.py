@@ -3,6 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from taggit.managers import TaggableManager
+from django.utils.text import slugify
 
 # Create your models here.
 class Category(models.Model):
@@ -27,11 +29,14 @@ class Category(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    slug = models.SlugField(default=None, unique=True)
+    related_img = models.URLField(blank=True, null=True)
     text = RichTextField()
+    short_description = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL)
-    slug = models.SlugField(default=None, unique=True)
+    tags = TaggableManager(blank=True)
 
     def publish(self):
         self.published_date = timezone.now()

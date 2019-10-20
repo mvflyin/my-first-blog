@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post, Comment, Category
+from taggit.models import Tag
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -20,11 +21,13 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    related_post = post.tags.similar_objects()[:2]
     return render(request, 'blog/post_detail.html', {'post': post})
 
 def post_detail_slug(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    related_post = post.tags.similar_objects()[:2]
+    return render(request, 'blog/post_detail.html', {'post': post, 'related_post': related_post})
 
 def category_post_list(request, slug):
     category = get_object_or_404(Category, slug=slug)
@@ -39,6 +42,20 @@ def category_post_list(request, slug):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     return render(request, 'blog/category_post_list.html',{'posts': posts})
+
+def tags_post_list(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts_lst = Post.objects.filter(tags=tag, published_date__lte=timezone.now()).order_by('-published_date')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(posts_lst, 5)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'blog/tags_post_list.html',{'posts': posts})
 
 @login_required
 def post_new(request):

@@ -1,24 +1,45 @@
 {% load static %}
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Athiti:300|Charm|Darker+Grotesque:300|Krub:300|Meddon&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Athiti:300|Charm|Darker+Grotesque:700|Krub:300|Meddon&display=swap" rel="stylesheet">
     <title>Vivi Gets Ready</title>
   </head>
     <body>
       <div class="navigration">
-          <p><a href="#">Category</a></p>
-          <p><a href="#">Category 2</a></p>
-          <p><a href="#">Giới thiệu</a></p>
-          {% if user.is_authenticated %}
-            <a href="{% url 'post_new' %}" class="top-menu"><span class='glyphicon glyphicon-plus'></span></a>
-            <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
-            <p class="top-menu">Chào, {{ user.username }} <small>(<a href="{% url 'logout' %}">Thoát</a>)</small></p>
-          {% else %}
-            <a href="{% url 'login' %}" class='top-menu'><span class="glyphicon glyphicon-lock"></span></a>
-          {% endif %}
+        <ul>
+          <li class="menu_toogle"><p>-<span class="fa fa-navicon" style="font-size:20px;"></span>-</p></li>
+          <div class="menu_toogle_unused">
+            <li><a href="{% url 'post_list' %}">Trang chủ</a></li>
+            <li class="dropdown">
+              <a href="javascript:void(0)" class="dropbtn">Phân loại</a>
+              <div class="dropdown-content">
+                <ul>
+                  {% for category in categorys %}
+                    <li><a href="{% url 'category_post_list' slug=category.slug %}">{{category.name}}</a></li>
+                  {% endfor %}
+                <ul>
+              </div>
+            </li>
+            <li><a href="#">Giới thiệu</a></li>
+          </div>
+        </ul>
+          <div class="top_menu">
+            <a href="#"><span class="fa fa-facebook-square"></span></a>
+            <a href="#"><span class="fa fa-instagram"></span></a>
+            {% if user.is_authenticated %}
+              <p><small>(<a href="{% url 'logout' %}">Thoát</a>)</small></p>
+              <a href="{% url 'post_new' %}"><span class='fa fa-plus'></span></a>
+              <a href="{% url 'post_draft_list' %}" class=><span class="fa fa-thumb-tack"></span></a>
+            {% else %}
+              <a href="{% url 'login' %}"><span class="fa fa-diamond"></span></a>
+              <p style="color:#fff">.</p>
+            {% endif %}
+          </div>
       </div>
       <div class="page-header">
         <h1><a href="{% url 'post_list' %}">Vivi Gets Ready</a></h1>
@@ -30,13 +51,20 @@
             {% block content %}
             {% endblock %}
           </div>
-          <div class="col-md-4">
-            <div class="aboutme">
+          <div class="col-md-3" style="border: 1px solid #f5f5f5; float:right">
+            <div class="right_column">
               <h3>About me</h3>
+              <p>Once you have a few posts created, you can go back to your local setup (not PythonAnywhere). From here you should work on your local setup to make changes. This is a common workflow in web development – make changes locally, push those changes to GitHub, and pull your changes down</p>
+            </div>
+            <div class="right_column">
+              <h3>Quảng cáo</h3>
               <p>Once you have a few posts created, you can go back to your local setup (not PythonAnywhere). From here you should work on your local setup to make changes. This is a common workflow in web development – make changes locally, push those changes to GitHub, and pull your changes down</p>
             </div>
           </div>
         </div>
       </div>
     </body>
+    <footer>
+      <p>2019 © Vivi Gets Ready | DƯỠNG DA, TRANG ĐIỂM, NHẬT KÝ CUỘC SỐNG</p>
+    </footer>
 </html>
