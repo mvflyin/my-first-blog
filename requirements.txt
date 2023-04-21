@@ -5,4 +5,4 @@ django-js-asset==1.2.2
 django-taggit==1.1.0
 pytz==2019.3
 six==1.12.0
-sqlparse==0.3.0
+sqlparse==0.4.4
